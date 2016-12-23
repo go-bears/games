@@ -223,6 +223,7 @@ def max_scoring_num_rolls(dice=six_sided):
     # call the make_averaged function for all numbers of dice 1-10
     for i in range(1,11):
         print ("{} dice scores {} on average".format(i, (make_averaged(roll_dice, 1000)(i, dice))))
+    
     # print total number of dice
     print(i)
 
@@ -278,17 +279,23 @@ def bacon_strategy(score, opponent_score):
     """
     "*** YOUR CODE HERE ***"
     
-    #return 5 # Replace with strategy
-    dice_rolls = BASELINE_NUM_ROLLS
+    #return 5 # Replace with your strategy
+    dice_rolls = None 
     max_digit = max([int(char) for char in str(opponent_score)])
 
-    if score == 0 and opponent_score == 0:
-        return dice_rolls
-    if max_digit + 1 < BACON_MARGIN:
-        return dice_rolls
-    if max_digit + 1 >= BACON_MARGIN:
+    if score == opponent_score:
+        dice_rolls = BASELINE_NUM_ROLLS
+    
+    elif max_digit + 1 < BACON_MARGIN:
+        dice_rolls = BASELINE_NUM_ROLLS
+
+    elif max_digit + 1 >= BACON_MARGIN:
         dice_rolls = 0
-        return dice_rolls
+    
+    else:
+        dice_rolls = BASELINE_NUM_ROLLS
+
+    return dice_rolls
 
 def swap_strategy(score, opponent_score):
     """This strategy rolls 0 dice when it would result in a beneficial swap and
@@ -306,7 +313,24 @@ def swap_strategy(score, opponent_score):
     5
     """
     "*** YOUR CODE HERE ***"
-    return 5 # Replace this statement
+    #return 5 # Replace this statement
+    dice_rolls = None
+    max_digit = max([int(char) for char in str(opponent_score)])
+    
+    if len(str(score)) < 2 and len(str(opponent_score)) < 2:
+        dice_rolls = BASELINE_NUM_ROLLS
+
+    elif opponent_score % (score + (max_digit+1)) == 0:
+        dice_rolls = 0
+
+    elif score % (opponent_score + (max_digit+1)) == 0:
+        dice_rolls = BASELINE_NUM_ROLLS
+       
+    elif score < opponent_score or score == opponent_score:
+        dice_rolls = bacon_strategy(score, opponent_score)
+    
+    return dice_rolls
+
 
 def final_strategy(score, opponent_score):
     """Write a brief description of your final strategy0.
@@ -314,7 +338,38 @@ def final_strategy(score, opponent_score):
     *** YOUR DESCRIPTION HERE ***
     """
     "*** YOUR CODE HERE ***"
-    return 5 # Replace this statement
+    # return 5 # Replace this statement
+    import random
+
+    dice = select_dice(score, opponent_score)
+    dice_rolls = BASELINE_NUM_ROLLS
+    max_digit = max([int(char) for char in str(opponent_score)])
+    
+    if score < opponent_score:
+ 
+        remainder = (score + opponent_score) % 7
+
+        if remainder == (max_digit + 1):
+            dice_rolls = bacon_strategy(score, opponent_score)
+
+        if (opponent_score - score) > 20:
+            dice_rolls = random.randint(7,10)
+
+        else:
+            dice_rolls = swap_strategy(score, opponent_score)
+
+    if (score - opponent_score) > 20:
+        if 9 == max_digit:
+            dice_rolls = bacon_strategy(score, opponent_score)
+        else:
+            dice_rolls = BASELINE_NUM_ROLLS
+
+
+    if dice == four_sided:
+        dice_rolls = 3
+
+    return dice_rolls
+
 
 
 ##########################
