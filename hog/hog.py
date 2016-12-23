@@ -120,7 +120,7 @@ def play(strategy0, strategy1, goal=GOAL_SCORE):
 
             # switch player after turn
             who = other(who)
-            
+
             # end game
             if score >= 100:
                 return score, opponent_score
@@ -188,8 +188,12 @@ def make_averaged(fn, num_samples=1000):
     Thus, the average value is 6.0.
     """
     "*** YOUR CODE HERE ***"
+
+    # define a function that takes *args as a parameter
     def make_result(*args): 
+        # calling function fn(*args) for n number of samples
         sum_of_results = sum([fn(*args) for i in range(num_samples)])
+        # find average and return the result
         result = float(sum_of_results) / num_samples
         
         return result
@@ -216,9 +220,10 @@ def max_scoring_num_rolls(dice=six_sided):
     10
     """
     "*** YOUR CODE HERE ***"
+    # call the make_averaged function for all numbers of dice 1-10
     for i in range(1,11):
         print ("{} dice scores {} on average".format(i, (make_averaged(roll_dice, 1000)(i, dice))))
-
+    # print total number of dice
     print(i)
 
 
@@ -272,7 +277,18 @@ def bacon_strategy(score, opponent_score):
     0
     """
     "*** YOUR CODE HERE ***"
-    return 5 # Replace this statement
+    
+    #return 5 # Replace with strategy
+    dice_rolls = BASELINE_NUM_ROLLS
+    max_digit = max([int(char) for char in str(opponent_score)])
+
+    if score == 0 and opponent_score == 0:
+        return dice_rolls
+    if max_digit + 1 < BACON_MARGIN:
+        return dice_rolls
+    if max_digit + 1 >= BACON_MARGIN:
+        dice_rolls = 0
+        return dice_rolls
 
 def swap_strategy(score, opponent_score):
     """This strategy rolls 0 dice when it would result in a beneficial swap and
@@ -293,7 +309,7 @@ def swap_strategy(score, opponent_score):
     return 5 # Replace this statement
 
 def final_strategy(score, opponent_score):
-    """Write a brief description of your final strategy.
+    """Write a brief description of your final strategy0.
 
     *** YOUR DESCRIPTION HERE ***
     """
