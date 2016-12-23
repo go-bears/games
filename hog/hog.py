@@ -1,4 +1,13 @@
-"""The Game of Hog."""
+"""The Game of Hog.
+
+instructions for completing the game can be found at:
+http://inst.eecs.berkeley.edu/~cs61a/fa13/proj/hog/hog.html
+
+hog_grader.py on the site is not available, but can be copied 
+from:
+https://raw.githubusercontent.com/go-bears/games/master/hog/hog_grader.py
+
+"""
 
 from dice import four_sided, six_sided, make_test_dice
 from ucb import main, trace, log_current_line, interact
@@ -22,15 +31,7 @@ def roll_dice(num_rolls, dice=six_sided):
     assert type(num_rolls) == int, 'num_rolls must be an integer.'
     assert num_rolls > 0, 'Must roll at least once.'
     "*** YOUR CODE HERE ***"
-    sum_outcomes = [dice() for i in range(num_rolls)]
-
-    if 1 in sum_outcomes:
-        sum_outcomes = 1 #sum_outcomes.count(1)
-    else:
-        sum_outcomes = sum(sum_outcomes)
-
-    return sum_outcomes
-
+    pass
 
 
 def take_turn(num_rolls, opponent_score, dice=six_sided):
@@ -49,13 +50,11 @@ def take_turn(num_rolls, opponent_score, dice=six_sided):
     # implementation of Free Bacon condition, 
     # if num_rolls is 0, score is maximum digit in oppenent's score + 1
     if num_rolls == 0:
-        digits = [int(char) for char in str(opponent_score)]
-        highest_digit = max(digits)
-        total = highest_digit + 1
+        pass
     else:
-        total = roll_dice(num_rolls, dice)
+        pass
 
-    return total
+    return #something
 
 # Playing a game
 
@@ -73,13 +72,12 @@ def select_dice(score, opponent_score):
     "*** YOUR CODE HERE ***"
     dice = six_sided
 
-    if ((score + opponent_score) > 0) and ((score + opponent_score) % 7) == 0:
-        dice = four_sided
+    # write condition that returns four-sided dice
 
     return dice
 
 
-
+# !do not touch this function; it works fine!
 def other(who):
     """Return the other player, for a player WHO numbered 0 or 1.
 
@@ -89,6 +87,7 @@ def other(who):
     0
     """
     return 1 - who
+
 
 def play(strategy0, strategy1, goal=GOAL_SCORE):
     """Simulate a game and return the final scores of both players, with
@@ -107,39 +106,32 @@ def play(strategy0, strategy1, goal=GOAL_SCORE):
 
 
     "*** YOUR CODE HERE ***"
+    # return score, opponent_score # You may wish to change this line.
 
     while True:
 
         # implement Hog Wild special rule
-        dice = select_dice(score, opponent_score)
+        
 
         # main game mechanics
         if who == 0:
-            num_rolls = strategy0(score, opponent_score)
-            score += take_turn(num_rolls, opponent_score, dice)
+           pass
 
             # switch player after turn
-            who = other(who)
-
+            
             # end game
             if score >= 100:
                 return score, opponent_score
 
-
+        # opponent player
         else:
-            num_rolls = strategy1(opponent_score, score)
-            opponent_score += take_turn(num_rolls, opponent_score, dice)
-            who = 0
+
             if opponent_score >= 100:
                 return score, opponent_score
 
-        
         # implement Swine Swap special rule after turn
-        if ((score * 2) == opponent_score) or ((opponent_score * 2) == score):
-            score = opponent_score
-            opponent_score = score
 
-    # return score, opponent_score # You may wish to change this line.
+
 
 #######################
 # Phase 2: Strategies #
@@ -191,12 +183,12 @@ def make_averaged(fn, num_samples=1000):
 
     # define a function that takes *args as a parameter
     def make_result(*args): 
-        # calling function fn(*args) for n number of samples
-        sum_of_results = sum([fn(*args) for i in range(num_samples)])
+        # call function fn(*args) for n number of samples
+
         # find average and return the result
-        result = float(sum_of_results) / num_samples
-        
-        return result
+
+        #
+        return #return for inner function
 
     return make_result
 
@@ -220,14 +212,13 @@ def max_scoring_num_rolls(dice=six_sided):
     10
     """
     "*** YOUR CODE HERE ***"
-    # call the make_averaged function for all numbers of dice 1-10
-    for i in range(1,11):
-        print ("{} dice scores {} on average".format(i, (make_averaged(roll_dice, 1000)(i, dice))))
-    
+    # call the make_averaged function for 
+    # print statements for all numbers of dice 1-10
+      
     # print total number of dice
-    print(i)
 
 
+# !do not touch!
 def winner(strategy0, strategy1):
     """Return 0 if strategy0 wins against strategy1, and 1 otherwise."""
     score0, score1 = play(strategy0, strategy1)
@@ -236,12 +227,14 @@ def winner(strategy0, strategy1):
     else:
         return 1
 
+# !do not touch!
 def average_win_rate(strategy, baseline=always_roll(BASELINE_NUM_ROLLS)):
     """Return the average win rate (0 to 1) of STRATEGY against BASELINE."""
     win_rate_as_player_0 = 1 - make_averaged(winner)(strategy, baseline)
     win_rate_as_player_1 = make_averaged(winner)(baseline, strategy)
     return (win_rate_as_player_0 + win_rate_as_player_1) / 2 # Average results
 
+# !do not touch!
 def run_experiments():
     """Run a series of strategy experiments and report results."""
     if True: # Change to False when done finding max_scoring_num_rolls
@@ -279,23 +272,8 @@ def bacon_strategy(score, opponent_score):
     """
     "*** YOUR CODE HERE ***"
     
-    #return 5 # Replace with your strategy
-    dice_rolls = None 
-    max_digit = max([int(char) for char in str(opponent_score)])
+    return 5 # Replace with your strategy
 
-    if score == opponent_score:
-        dice_rolls = BASELINE_NUM_ROLLS
-    
-    elif max_digit + 1 < BACON_MARGIN:
-        dice_rolls = BASELINE_NUM_ROLLS
-
-    elif max_digit + 1 >= BACON_MARGIN:
-        dice_rolls = 0
-    
-    else:
-        dice_rolls = BASELINE_NUM_ROLLS
-
-    return dice_rolls
 
 def swap_strategy(score, opponent_score):
     """This strategy rolls 0 dice when it would result in a beneficial swap and
@@ -313,23 +291,7 @@ def swap_strategy(score, opponent_score):
     5
     """
     "*** YOUR CODE HERE ***"
-    #return 5 # Replace this statement
-    dice_rolls = None
-    max_digit = max([int(char) for char in str(opponent_score)])
-    
-    if len(str(score)) < 2 and len(str(opponent_score)) < 2:
-        dice_rolls = BASELINE_NUM_ROLLS
-
-    elif opponent_score % (score + (max_digit+1)) == 0:
-        dice_rolls = 0
-
-    elif score % (opponent_score + (max_digit+1)) == 0:
-        dice_rolls = BASELINE_NUM_ROLLS
-       
-    elif score < opponent_score or score == opponent_score:
-        dice_rolls = bacon_strategy(score, opponent_score)
-    
-    return dice_rolls
+    return 5 # Replace this with your strategy 
 
 
 def final_strategy(score, opponent_score):
@@ -338,37 +300,10 @@ def final_strategy(score, opponent_score):
     *** YOUR DESCRIPTION HERE ***
     """
     "*** YOUR CODE HERE ***"
-    # return 5 # Replace this statement
-    import random
+    return 5 # Replace this statement
+    # you will be writing conditions that call previously defined
+    # functions
 
-    dice = select_dice(score, opponent_score)
-    dice_rolls = BASELINE_NUM_ROLLS
-    max_digit = max([int(char) for char in str(opponent_score)])
-    
-    if score < opponent_score:
- 
-        remainder = (score + opponent_score) % 7
-
-        if remainder == (max_digit + 1):
-            dice_rolls = bacon_strategy(score, opponent_score)
-
-        if (opponent_score - score) > 20:
-            dice_rolls = random.randint(7,10)
-
-        else:
-            dice_rolls = swap_strategy(score, opponent_score)
-
-    if (score - opponent_score) > 20:
-        if 9 == max_digit:
-            dice_rolls = bacon_strategy(score, opponent_score)
-        else:
-            dice_rolls = BASELINE_NUM_ROLLS
-
-
-    if dice == four_sided:
-        dice_rolls = 3
-
-    return dice_rolls
 
 
 
